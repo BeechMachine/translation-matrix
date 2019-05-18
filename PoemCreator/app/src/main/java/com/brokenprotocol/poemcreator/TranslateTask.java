@@ -14,9 +14,11 @@ import java.io.InputStream;
 public class TranslateTask extends AsyncTask<Void, Void, Void> {
 
     private Activity activity;
+    private String phrase;
 
-    public TranslateTask(Activity activity) {
+    public TranslateTask(Activity activity, String phrase) {
         this.activity = activity;
+        this.phrase = phrase;
     }
 
     @Override
@@ -28,18 +30,15 @@ public class TranslateTask extends AsyncTask<Void, Void, Void> {
             // Instantiates a client
             Translate translate = TranslateOptions.newBuilder().setCredentials(ServiceAccountCredentials.fromStream(stream)).build().getService();
 
-            // The text to translate
-            String text = "Hello, world!";
-
             // Translates some text into Russian
             Translation translation =
                     translate.translate(
-                            text,
+                            phrase,
                             TranslateOption.sourceLanguage("en"),
                             TranslateOption.targetLanguage("ru"));
 
 
-            System.out.printf("Text: %s%n", text);
+            System.out.printf("Text: %s%n", phrase);
             System.out.printf("Translation: %s%n", translation.getTranslatedText());
         } catch (Exception e) {
             System.out.print("Bailed!");
