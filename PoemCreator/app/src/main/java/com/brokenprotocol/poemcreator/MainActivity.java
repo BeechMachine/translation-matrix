@@ -41,8 +41,15 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+        AdapterView.OnItemClickListener targetClickListener = new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                String language =
+            }
+        };
+
         ListView languageListView = findViewById(R.id.language_list_view);
-        adapter = new LanguageAdapter(this, this, items);
+        adapter = new LanguageAdapter(this, this, items, sourceClickListener, targetClickListener);
         languageListView.setAdapter(adapter);
 
         ImageButton addButton = findViewById(R.id.translate_toolbar_button);
