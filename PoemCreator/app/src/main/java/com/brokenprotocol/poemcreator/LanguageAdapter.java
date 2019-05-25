@@ -22,10 +22,10 @@ public class LanguageAdapter extends BaseAdapter {
 
     private Activity parentActivity;
 
-    private AdapterView.OnItemClickListener sourceClickListener;
-    private AdapterView.OnItemClickListener targetClickListener;
+    private AdapterView.OnItemSelectedListener sourceClickListener;
+    private AdapterView.OnItemSelectedListener targetClickListener;
 
-    LanguageAdapter(Context context, Activity parentActivity, ArrayList<TranslationItem> items, AdapterView.OnItemClickListener sourceClickListener, AdapterView.OnItemClickListener targetClickListener) {
+    LanguageAdapter(Context context, Activity parentActivity, ArrayList<TranslationItem> items, AdapterView.OnItemSelectedListener sourceClickListener, AdapterView.OnItemSelectedListener targetClickListener) {
         inflater = LayoutInflater.from(context);
         this.parentActivity = parentActivity;
         this.items = items;
@@ -59,7 +59,7 @@ public class LanguageAdapter extends BaseAdapter {
 
         View view;
 
-        TranslationItem item = (TranslationItem) getItem(position);
+        final TranslationItem item = (TranslationItem) getItem(position);
 
         if (convertView == null) {
             view = inflater.inflate(R.layout.translation_item_cell, null);
@@ -68,23 +68,23 @@ public class LanguageAdapter extends BaseAdapter {
         }
 
         String[] languageArray = parentActivity.getResources().getStringArray(R.array.languages_list);
-        List<String> languageList = Arrays.asList(languageArray);
+        final List<String> languageList = Arrays.asList(languageArray);
 
         ArrayAdapter spinnerArrayAdapter = new ArrayAdapter(parentActivity,
                 android.R.layout.simple_spinner_dropdown_item,
                 languageList);
 
-        Spinner sourceSpinner = view.findViewById(R.id.sourceSpinner);
+        final Spinner sourceSpinner = view.findViewById(R.id.sourceSpinner);
         sourceSpinner.setAdapter(spinnerArrayAdapter);
-        sourceSpinner.setSelection(spinnerArrayAdapter.getPosition(item.getSourceLanguage()));
+        sourceSpinner.setOnItemSelectedListener(sourceClickListener);
+        sourceSpinner.setTag(position);
+        sourceSpinner.setSelection(languageList.indexOf(item.getSourceLanguage()));
 
-//        sourceSpinner.setOnItemClickListener(sourceClickListener);
-
-        Spinner targetSpinner = view.findViewById(R.id.targetSpinner);
+        final Spinner targetSpinner = view.findViewById(R.id.targetSpinner);
         targetSpinner.setAdapter(spinnerArrayAdapter);
-        targetSpinner.setSelection(spinnerArrayAdapter.getPosition(item.getTargetLanguage()));
-
-//        targetSpinner.setOnItemClickListener(targetClickListener);
+        targetSpinner.setOnItemSelectedListener(targetClickListener);
+        targetSpinner.setTag(position);
+        targetSpinner.setSelection(languageList.indexOf(item.getTargetLanguage()));
 
         return view;
     }

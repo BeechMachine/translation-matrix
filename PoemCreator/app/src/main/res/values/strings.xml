@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PoemCreator</string>
+    <string name="app_name">Transmutilator</string>
 
     <string-array name="languages_list">
         <item>English</item>

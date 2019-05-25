@@ -2,12 +2,12 @@ package com.brokenprotocol.poemcreator;
 
 public class TranslationItem {
 
-    private String sourceLanguage;
-    private String targetLanguage;
-    private int orderNumber;
+    private String sourceLanguage = "";
+    private String targetLanguage = "";
 
-    TranslationItem(String sourceLanguage, String targetLanguage, int orderNumber) {
-
+    TranslationItem(String sourceLanguage, String targetLanguage) {
+        this.sourceLanguage = sourceLanguage;
+        this.targetLanguage = targetLanguage;
     }
 
     public String getSourceLanguage() {
@@ -26,11 +26,12 @@ public class TranslationItem {
         this.targetLanguage = targetLanguage;
     }
 
-    public int getOrderNumber() {
-        return orderNumber;
-    }
-
-    public void setOrderNumber(int orderNumber) {
-        this.orderNumber = orderNumber;
+    @Override
+    public String toString() {
+        return new StringBuilder()
+                .append("{Translate")
+                .append(" sourceLanguage=").append(sourceLanguage)
+                .append(", targetLanguage=").append(targetLanguage)
+                .append("}").toString();
     }
 }
