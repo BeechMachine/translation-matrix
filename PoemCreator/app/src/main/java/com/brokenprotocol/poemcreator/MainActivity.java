@@ -18,8 +18,10 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    ArrayList<TranslationItem> items = new ArrayList<TranslationItem>();
-    LanguageAdapter adapter = null;
+    private ArrayList<TranslationItem> items = new ArrayList<TranslationItem>();
+    private LanguageAdapter adapter = null;
+
+    private boolean isWorking = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +90,9 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+        TextView output = findViewById(R.id.outputTextView);
+        output.setMovementMethod(new ScrollingMovementMethod());
+
         final ListView languageListView = findViewById(R.id.language_list_view);
         adapter = new LanguageAdapter(this, this, items, sourceSelectionListener, targetSelectionListener);
         languageListView.setAdapter(adapter);
@@ -106,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
 
         final Activity anchorActivity = this;
 
-        Button transmutilateButton = findViewById(R.id.translateButton);
+        final Button transmutilateButton = findViewById(R.id.translateButton);
         transmutilateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -116,17 +121,38 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
+                if (items.size() <= 1) {
+                    return;
+                }
+
                 TextView output = findViewById(R.id.outputTextView);
-                output.setVisibility(View.VISIBLE);
 
-                output.setMovementMethod(new ScrollingMovementMethod());
+                if (isWorking) {
 
-                phraseEditText.setVisibility(View.GONE);
-                languageListView.setVisibility(View.GONE);
+                    isWorking = false;
 
-                TransmutilationEngine engine = new TransmutilationEngine(anchorActivity, items, output);
-                engine.transmutilate(phraseEditText.getText().toString());
+                    output.setText("");
 
+                    items = new ArrayList<>();
+                    items.add(new TranslationItem("English", "English"));
+                    adapter.updateData(items);
+
+                    transmutilateButton.setText("Transmutilate");
+                    phraseEditText.setVisibility(View.VISIBLE);
+                    languageListView.setVisibility(View.VISIBLE);
+                } else {
+
+                    isWorking = true;
+
+                    output.setVisibility(View.VISIBLE);
+
+                    transmutilateButton.setText("Reset");
+                    phraseEditText.setVisibility(View.INVISIBLE);
+                    languageListView.setVisibility(View.INVISIBLE);
+
+                    TransmutilationEngine engine = new TransmutilationEngine(anchorActivity, items, output);
+                    engine.transmutilate(phraseEditText.getText().toString());
+                }
             }
         });
     }

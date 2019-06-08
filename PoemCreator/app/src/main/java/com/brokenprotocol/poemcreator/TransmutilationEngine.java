@@ -26,6 +26,13 @@ public class TransmutilationEngine implements TransmutilatorProtocol {
         this.activity = activity;
         this.items = items;
         this.output = output;
+
+        TranslationItem first = this.items.get(0);
+        TranslationItem last = this.items.get(this.items.size()-1);
+
+        if (!(first.getSourceLanguage().equals(last.getTargetLanguage()))) {
+            this.items.add(new TranslationItem(last.getTargetLanguage(), first.getSourceLanguage()));
+        }
     }
 
     public void transmutilate(String phrase) {
